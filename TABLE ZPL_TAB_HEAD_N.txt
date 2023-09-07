@@ -1,0 +1,45 @@
+@EndUserText.label : 'Transactional Table for Procurement List'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zpl_tab_head_n {
+  key mandt       : mandt not null;
+  key plist       : numc10 not null;
+  name            : /sapapo/cres_name;
+  plate_no        : char20;
+  est_chg_req     : char10;
+  @Semantics.quantity.unitOfMeasure : 'zpl_tab_head_n.unit'
+  qty             : menge_d;
+  unit            : /sapapo/meins;
+  division        : hrobjid;
+  owner           : num8;
+  zzuser          : num8;
+  year_of_const   : char4;
+  exp_date        : datum;
+  @EndUserText.label : 'Total Counter Reading'
+  km_reading      : abap.dec(16,0);
+  act_config      : char30;
+  equip_con_code  : char6;
+  alloc_code      : char2;
+  equip_type      : /scmb/de_equi_code;
+  description     : /sapapo/cres_text;
+  diso            : char3;
+  diso_options    : char80;
+  log_catg        : char3;
+  comments        : char20;
+  ref_file        : char12;
+  attachmnt       : char1;
+  status          : char11;
+  apprv_by        : usnam;
+  proc_file_no    : char10;
+  contract_no     : ebeln;
+  procurement_dt  : datum;
+  delivery_dt     : datum;
+  created_by      : usnam;
+  created_at      : timestamp;
+  changed_by      : usnam;
+  changed_at      : timestamp;
+  locl_changed_at : timestamp;
+
+}

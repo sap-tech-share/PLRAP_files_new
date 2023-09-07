@@ -1,0 +1,74 @@
+managed implementation in class zbp_i_pl_head_tp_n unique;
+strict;
+//    with draft;
+
+define behavior for ZI_PL_HEAD_TP_N alias Plist
+persistent table zpl_tab_head_n
+//    draft table zpl_tab_head_d
+lock master
+//    total etag ChangedAt
+early numbering
+authorization master ( instance )
+etag master LoclChangedAt
+{
+  field ( features : instance ) PlateNo, EquipType;
+  field ( readonly ) Plist, Status, CreatedAt, CreatedBy, ChangedAt, ChangedBy, LoclChangedAt;
+  field ( mandatory ) PlateNo;
+  create;
+  update;
+  delete;
+
+  validation ValidatePlate on save { field PlateNo; create; }
+  validation MandatoryCheck on save { create; field Diso, DisoOptions, Comments, EstChgReq, LogCatg; }
+  determination SetInitialStatus on save { create; }
+  determination PopulateVehicleDetails on modify { create; field PlateNo; }
+  determination SetCreateStatus on save { create; field PlateNo, EquipType; }
+  action ( features : instance ) SetStatusComplete parameter za_status_n result [1] $self;
+
+  static factory action CreateNewLicense [1];
+  static factory action CreateNewCR [1];
+
+  //      draft action Edit;
+  //      draft action Resume;
+  //      draft action Activate;
+  //      draft action Discard;
+  //      draft determine action Prepare { validation ValidatePlate; }
+
+  mapping for zpl_tab_head_n
+  {
+    Plist = plist;
+    Name = name;
+    PlateNo = plate_no;
+    EstChgReq = est_chg_req;
+    Qty = qty;
+    Unit = unit;
+    Division = division;
+    Owner = owner;
+    Zzuser = zzuser;
+    YearOfConst = year_of_const;
+    ExpDate = exp_date;
+    KmReading = km_reading;
+    ActConfig = act_config;
+    EquipConCode = equip_con_code;
+    AllocCode = alloc_code;
+    EquipType = equip_type;
+    Description = description;
+    Diso = diso;
+    DisoOptions = diso_options;
+    LogCatg = log_catg;
+    Comments = comments;
+    RefFile = ref_file;
+    Attachmnt = attachmnt;
+    Status = status;
+    ApprovedBy = apprv_by;
+    ProcFileNo = proc_file_no;
+    ContractNo = contract_no;
+    ProcurementDate = procurement_dt;
+    DeliveryDate = delivery_dt;
+    CreatedBy = created_by;
+    CreatedAt = created_at;
+    ChangedBy = changed_by;
+    ChangedAt = changed_at;
+    LoclChangedAt = locl_changed_at;
+  }
+}

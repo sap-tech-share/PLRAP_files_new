@@ -1,0 +1,55 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Transactional View for ZI_PL_HEAD'
+@Search.searchable: true
+@Metadata.allowExtensions: true
+@ObjectModel.semanticKey: ['Plist']
+define root view entity ZI_PL_HEAD_TP_N as select from ZI_PL_HEAD_N
+association [1] to ZI_RESID_VEHICLE as _ResID on $projection.PlateNo = _ResID.PlateNo
+{
+//    @ObjectModel.text.element: ['Name']
+    @Search.defaultSearchElement: true
+    @Search.fuzzinessThreshold: 0.7
+    @Search.ranking: #HIGH
+    key Plist,
+    @Semantics.text: true
+    @Search.defaultSearchElement: true
+    @Search.fuzzinessThreshold: 0.7
+    Name,
+    @Search.defaultSearchElement: true
+    @Search.fuzzinessThreshold: 0.7
+    PlateNo,
+    EstChgReq,
+    @Semantics.quantity.unitOfMeasure: 'Unit'
+    Qty,
+    Unit,
+    Division,
+    Owner,
+    Zzuser,
+    YearOfConst,
+    ExpDate,
+    KmReading,
+    ActConfig,
+    EquipConCode,
+    AllocCode,
+    EquipType,
+    Description,
+    Diso,
+    DisoOptions,
+    LogCatg,
+    Comments,
+    RefFile,
+    Attachmnt,
+    Status,
+    ApprovedBy,
+    ProcFileNo,
+    ContractNo,
+    ProcurementDate,
+    DeliveryDate,
+    CreatedBy,
+    CreatedAt,
+    ChangedBy,
+    ChangedAt,
+    LoclChangedAt,
+    /* Associations */
+    _ResID
+}
