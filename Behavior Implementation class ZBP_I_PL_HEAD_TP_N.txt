@@ -254,8 +254,8 @@ CLASS lhc_plist IMPLEMENTATION.
 
 
     LOOP AT lt_plist INTO DATA(ls_plist).
-      SELECT SINGLE plate_ind, cr_ind FROM zpl_tab_head WHERE plist = @ls_plist-plist INTO
-        @DATA(lv_plate_cr).
+      SELECT SINGLE @abap_true FROM zpl_tab_head_n WHERE plist = @ls_plist-plist INTO
+        @DATA(lv_plate_exists).
 
       IF sy-subrc = 0 AND ls_plist-PlateNo IS INITIAL.
 *       Updated failed data to the framework
@@ -265,7 +265,7 @@ CLASS lhc_plist IMPLEMENTATION.
                         %msg = new_message_with_text(
                         severity = if_abap_behv_message=>severity-error
                         text = 'Plate Number is mandatory') ) TO reported-plist.
-      ELSEIF sy-subrc = 0 AND ls_plist-EquipType IS INITIAL.
+      ELSEIF sy-subrc = 0 AND ls_plist-PlateNo IS INITIAL AND ls_plist-EquipType IS INITIAL.
 *       Update message for failed validation of Equipment Type
         APPEND VALUE #( %tky = ls_plist-%tky ) TO failed-plist.
         APPEND VALUE #( %tky = keys[ 1 ]-%tky
