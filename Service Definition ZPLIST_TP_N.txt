@@ -2,4 +2,5 @@
 define service ZPLIST_TP_n {
   expose ZC_PL_HEAD_TP_n as ProcurementList;
   expose ZI_RESID as Resources;
+  expose ZI_STATUS_VH as StatusValues;
 }

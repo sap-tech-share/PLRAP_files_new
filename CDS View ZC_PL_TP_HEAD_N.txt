@@ -1,0 +1,59 @@
+@EndUserText.label: 'Consumption view for ZI_PL_HEAD_TP'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+@Search.searchable: true
+
+define root view entity ZC_PL_HEAD_TP_n 
+provider contract transactional_query
+as projection on ZI_PL_HEAD_TP_N
+{
+    @EndUserText.label: 'Procurement List#'
+    key Plist,
+    Name,
+    @EndUserText.label: 'Plate#'
+    @Consumption.valueHelpDefinition: [ {
+        entity: {
+          name: 'ZI_RESID',
+          element: 'PlateNo'
+        }, useForValidation: true
+      } ]
+      
+    PlateNo,
+    EstChgReq,
+    Qty,
+    Unit,
+    Division,
+    Owner,
+    Zzuser,
+    YearOfConst,
+    ExpDate,
+    KmReading,
+    ActConfig,
+    EquipConCode,
+    AllocCode,
+    EquipType,
+    Description,
+    Diso,
+    DisoOptions,
+    LogCatg,
+    Comments,
+    RefFile,
+    Attachmnt,
+    @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_STATUS_VH', element: 'value_low'} }]
+    @ObjectModel.text.element: [ 'text' ]    
+    Status,
+    ApprovedBy,
+    ProcFileNo,
+    ContractNo,
+    ProcurementDate,
+    DeliveryDate,
+    CreatedBy,
+    CreatedAt,
+    ChangedBy,
+    ChangedAt,
+    LoclChangedAt,
+    /* Associations */
+    _ResID,
+    _StatusText.text as text    
+
+}

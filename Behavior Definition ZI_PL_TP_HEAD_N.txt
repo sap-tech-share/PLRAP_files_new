@@ -11,8 +11,9 @@ early numbering
 authorization master ( instance )
 etag master LoclChangedAt
 {
-  field ( features : instance ) PlateNo, EquipType;
-  field ( readonly ) Plist, Status, CreatedAt, CreatedBy, ChangedAt, ChangedBy, LoclChangedAt;
+  field ( features : instance ) PlateNo, EquipType, EstChgReq;
+  field ( readonly ) Plist, Status, CreatedAt, CreatedBy, ChangedAt, ChangedBy, LoclChangedAt,
+                     Division, Zzuser, YearOfConst, ExpDate, KmReading, ActConfig, EquipConCode;
   field ( mandatory ) PlateNo;
   create;
   update;

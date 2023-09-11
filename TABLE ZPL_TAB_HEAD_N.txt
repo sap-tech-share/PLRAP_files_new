@@ -30,7 +30,7 @@ define table zpl_tab_head_n {
   comments        : char20;
   ref_file        : char12;
   attachmnt       : char1;
-  status          : char11;
+  status          : zmg_stat;
   apprv_by        : usnam;
   proc_file_no    : char10;
   contract_no     : ebeln;

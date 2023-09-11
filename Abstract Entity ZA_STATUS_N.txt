@@ -2,6 +2,8 @@
 define abstract entity ZA_STATUS_N
 //  with parameters parameter_name : parameter_type
 {
-    status : abap.char(11);
+    @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_STATUS_VH', element: 'value_low'},useForValidation: true }]
+    status_act : zmg_stat;
+//    status : abap.char(11);
     
 }

@@ -40,14 +40,16 @@ CLASS lhc_plist IMPLEMENTATION.
         ALL FIELDS WITH CORRESPONDING #( keys )
       RESULT DATA(lt_plist).
 
-*      result = VALUE #( for ls_plist in lt_plist
-*                ( %tky = ls_plist-%tky
-**                  %field-PlateNo = if_abap_behv=>fc-f-mandatory )
-*                  %field-PlateNo = COND #( WHEN ( ls_plist-PlateInd = 'X' AND ls_plist-PlistFinal = '' )
-*                                           THEN if_abap_behv=>fc-f-mandatory ELSE if_abap_behv=>fc-f-read_only )
-*                  %field-EquipType = COND #( WHEN ( ls_plist-CRInd = 'X' AND ls_plist-PlistFinal = '' )
-*                                           THEN if_abap_behv=>fc-f-mandatory ELSE if_abap_behv=>fc-f-read_only ) )
-*                ).
+    data(lv_plist) = lt_plist[ 1 ]-plist.
+    SELECT single * FROM zpl_tab_head_n INTO @data(ls_plist_saved) WHERE plist = @lv_plist.
+      result = VALUE #( for ls_plist in lt_plist
+                ( %tky = ls_plist-%tky
+*                  %field-PlateNo = if_abap_behv=>fc-f-mandatory )
+                  %field-PlateNo = COND #( WHEN ( ls_plist_saved-plate_no IS INITIAL )
+                                           THEN if_abap_behv=>fc-f-mandatory ELSE if_abap_behv=>fc-f-read_only )
+                  %field-EstChgReq = COND #( WHEN ( ls_plist_saved-plate_no IS NOT INITIAL )
+                                           THEN if_abap_behv=>fc-f-read_only ) )
+                ).
   ENDMETHOD.
 
   METHOD get_instance_authorizations.
@@ -56,13 +58,28 @@ CLASS lhc_plist IMPLEMENTATION.
   METHOD earlynumbering_create.
 *   Generate numbers for active and draft modes
 *   This should be replaced by a number range
+
+    try.
+    cl_numberrange_runtime=>number_get(
+      EXPORTING
+        nr_range_nr       = '01'
+        object            = 'ZMG_PL'
+      IMPORTING
+        number            = data(lv_number)
+        returncode        = data(lv_ret_code)
+        returned_quantity = data(lv_ret_qty)
+    ).
+    CATCH cx_nr_object_not_found.
+    CATCH cx_number_ranges.
+    ENDTRY.
     DATA(lt_entities) = entities.
-    SELECT MAX(  plist ) FROM zpl_tab_head_n INTO @DATA(lv_max_plist).
+*    SELECT MAX(  plist ) FROM zpl_tab_head_n INTO @DATA(lv_max_plist).
 *    SELECT max(  plist ) FROM zpl_tab_head_d into @DATA(lv_max_plist_d).
 *    if lv_max_plist_d gt lv_max_plist.
 *        lv_max_plist = lv_max_plist_d.
 *    endif.
-
+    data lv_max_plist TYPE numc10.
+    lv_max_plist = lv_number - lv_ret_qty.
     LOOP AT lt_entities INTO DATA(ls_entity).
       IF ls_entity-plist IS INITIAL.
         lv_max_plist = lv_max_plist + 1.
@@ -76,6 +93,17 @@ CLASS lhc_plist IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD setstatuscomplete.
+    data(lv_stat) = keys[ 1 ]-%param-status_act.
+    SELECT SINGLE @abap_true INTO @data(lv_stat_exists) FROM zi_status_vh WHERE value_low = @lv_stat.
+    if lv_stat_exists is INITIAL.
+*       Updated failed data to framework
+        APPEND VALUE #( %tky = keys[ 1 ]-%tky ) TO failed-plist.
+*       Update message if the plate number exists
+        APPEND VALUE #( %tky = keys[ 1 ]-%tky
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = |Invalid Status Value { lv_stat } Entered| ) ) TO reported-plist.
+    else.
 *   This is triggered from Update Status action,
 *   Update the status with the value entered
     MODIFY ENTITIES OF zi_pl_head_tp_n IN LOCAL MODE
@@ -84,7 +112,7 @@ CLASS lhc_plist IMPLEMENTATION.
          FIELDS ( status )
          WITH VALUE #( FOR key IN keys
                          ( %tky         = key-%tky
-                           status = key-%param-status ) )
+                           status = key-%param-status_act ) )
     FAILED failed
     REPORTED reported.
 
@@ -97,6 +125,7 @@ CLASS lhc_plist IMPLEMENTATION.
     result = VALUE #( FOR ls_plist IN lt_plist
                         ( %tky   = ls_plist-%tky
                           %param = ls_plist ) ).
+    ENDIF.
   ENDMETHOD.
 
   METHOD setinitialstatus.
@@ -112,7 +141,7 @@ CLASS lhc_plist IMPLEMENTATION.
         ENTITY plist UPDATE FIELDS ( status )
         WITH VALUE #( FOR ls_plist IN lt_plist
                     ( %tky      = ls_plist-%tky
-                      status    = 'Initiated' ) )
+                      status    = 'R' ) )
         REPORTED DATA(update_reported).
 
     reported = CORRESPONDING #( DEEP update_reported ).
@@ -230,17 +259,17 @@ CLASS lhc_plist IMPLEMENTATION.
 *   This is triggered when clicked on the New From Change Req button
 *   This puts a blank instance with change req indicator to the table which helps the
 *   Fiori Element to identify which field to display for creation
-    modify entities of zi_pl_head_tp_n in local mode
-        entity Plist
-        create from value #( for <instance> in keys
-                    ( %cid = <instance>-%cid
-*                    CRInd = abap_true
-*                      %control = VALUE #( CRInd = if_abap_behv=>mk-on )
-                      ) )
-
-                    mapped mapped
-                    failed failed
-                    reported reported.
+*    modify entities of zi_pl_head_tp_n in local mode
+*        entity Plist
+*        create from value #( for <instance> in keys
+*                    ( %cid = <instance>-%cid
+**                    CRInd = abap_true
+**                      %control = VALUE #( CRInd = if_abap_behv=>mk-on )
+*                      ) )
+*
+*                    mapped mapped
+*                    failed failed
+*                    reported reported.
   ENDMETHOD.
 
   METHOD MandatoryCheck.

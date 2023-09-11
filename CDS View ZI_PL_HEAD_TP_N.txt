@@ -5,6 +5,7 @@
 @ObjectModel.semanticKey: ['Plist']
 define root view entity ZI_PL_HEAD_TP_N as select from ZI_PL_HEAD_N
 association [1] to ZI_RESID_VEHICLE as _ResID on $projection.PlateNo = _ResID.PlateNo
+association [1] to ZI_STATUS_VH as _StatusText on $projection.Status =_StatusText.value_low
 {
 //    @ObjectModel.text.element: ['Name']
     @Search.defaultSearchElement: true
@@ -51,5 +52,6 @@ association [1] to ZI_RESID_VEHICLE as _ResID on $projection.PlateNo = _ResID.Pl
     ChangedAt,
     LoclChangedAt,
     /* Associations */
-    _ResID
+    _ResID,
+    _StatusText
 }
