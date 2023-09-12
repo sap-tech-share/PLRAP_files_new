@@ -20,10 +20,12 @@ as projection on ZI_PL_HEAD_TP_N
       
     PlateNo,
     EstChgReq,
+    PlateHidden,
+    CommonHidden,    
     Qty,
     Unit,
     Division,
-    Owner,
+    Owner, 
     Zzuser,
     YearOfConst,
     ExpDate,

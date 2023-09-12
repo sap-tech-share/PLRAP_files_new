@@ -1,194 +1,192 @@
 @Metadata.layer: #CORE
-@UI.headerInfo: { 
+@UI.headerInfo: {
 typeName: 'Procurement List',
 typeNamePlural: 'Procurement Lists',
 title: { value: 'Plist', label: 'Procurement List' },
-description: { 
+description: {
 label: 'Manage Procurement List',
 type: #STANDARD, value: 'Zzuser'}}
-
-annotate entity ZC_PL_HEAD_TP_n
-    with 
+annotate entity ZC_PL_HEAD_TP_n with
 {
-@UI.facet: [{
-id: 'GeneralPlate',
-type: #COLLECTION,
-purpose: #STANDARD,
-label: 'Procurement List - Plate Number', hidden: #( PlateHidden ) },
+  @UI.facet: [{
+  id: 'GeneralPlate',
+  type: #COLLECTION,
+  purpose: #STANDARD,
+  label: 'Procurement List - Plate Number', hidden: #( PlateHidden ) },
 
-{id: 'GeneralCR',
-type: #COLLECTION,
-purpose: #STANDARD,
-label: 'Procurement List - Change Request Number', hidden: true },
+  {id: 'GeneralCR',
+  type: #COLLECTION,
+  purpose: #STANDARD,
+  label: 'Procurement List - Change Request Number', hidden: true },
 
-{ id: 'Plate',
-type: #FIELDGROUP_REFERENCE,
-purpose: #STANDARD,
-label: 'Plate# to be replaced',
-parentId: 'GeneralPlate',
-targetQualifier: 'Plate', hidden: #( PlateHidden )},
+  { id: 'Plate',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Plate# to be replaced',
+  parentId: 'GeneralPlate',
+  targetQualifier: 'Plate', hidden: #( PlateHidden )},
 
 
-{ id: 'AdditionalInfoPlate',
-type: #FIELDGROUP_REFERENCE,
-purpose: #STANDARD,
-label: 'Additional Information',
-parentId: 'GeneralPlate',
-targetQualifier: 'AdditionalInfoPlate', hidden: #( PlateHidden )} ,
+  { id: 'AdditionalInfoPlate',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Additional Information',
+//  parentId: 'GeneralPlate',
+  targetQualifier: 'AdditionalInfoPlate', hidden: #( PlateHidden )} ,
 
-//----------
-{id: 'GeneralUpdate',
-type: #COLLECTION,
-purpose: #STANDARD,
-label: 'Procurement List Details', hidden: #( CommonHidden ) },
+  //----------
+  {id: 'GeneralUpdate',
+  type: #COLLECTION,
+  purpose: #STANDARD,
+  label: 'Procurement List Details', hidden: #( CommonHidden ) },
 
-{ id: 'GenericUpdate',
-type: #FIELDGROUP_REFERENCE,
-purpose: #STANDARD,
-label: 'Generic Information',
-parentId: 'GeneralUpdate',
-targetQualifier: 'GenericUpdate', hidden: #( CommonHidden )},
+  { id: 'GenericUpdate',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Generic Information',
+  parentId: 'GeneralUpdate',
+  targetQualifier: 'GenericUpdate', hidden: #( CommonHidden )},
 
-{ id: 'EditableUpdate',
-type: #FIELDGROUP_REFERENCE,
-purpose: #STANDARD,
-label: 'Update Procurement List',
-//parentId: 'GeneralUpdate',
-targetQualifier: 'EditableUpdate', hidden: #( CommonHidden )},
-//----------
+  { id: 'EditableUpdate',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Update Procurement List',
+  //parentId: 'GeneralUpdate',
+  targetQualifier: 'EditableUpdate', hidden: #( CommonHidden )},
+  //----------
 
-{ id: 'CR',
-type: #FIELDGROUP_REFERENCE,
-purpose: #STANDARD,
-label: 'Change Request',
-parentId: 'GeneralCR',
-targetQualifier: 'CR', hidden: true},
+  { id: 'CR',
+  type: #FIELDGROUP_REFERENCE,
+  purpose: #STANDARD,
+  label: 'Change Request',
+  parentId: 'GeneralCR',
+  targetQualifier: 'CR', hidden: true},
 
-{ id:'HeaderStatus',
-purpose: #HEADER,
-type: #DATAPOINT_REFERENCE,
-targetQualifier: 'Status',
-position: 10 }]
+  { id:'HeaderStatus',
+  purpose: #HEADER,
+  type: #DATAPOINT_REFERENCE,
+  targetQualifier: 'Status',
+  position: 10 }]
 
-@UI.identification: [{ importance: #HIGH, dataAction: 'SetStatusComplete', label: 'Update Status', position: 10, type: #FOR_ACTION }]
+  @UI.identification: [{ importance: #HIGH, dataAction: 'SetStatusComplete', label: 'Update Status', position: 10, type: #FOR_ACTION }]
 
-@UI.selectionField: [{ position: 10 }]
-@UI.lineItem: [{ position: 10, label: 'Procurement List' },
-               {  importance: #HIGH, dataAction: 'CreateNewLicense', label: 'New From License', position: 10, type: #FOR_ACTION },
-               {  importance: #HIGH, dataAction: 'CreateNewCR', label: 'New From Change Req#', position: 20, type: #FOR_ACTION },
-               {  importance: #HIGH, dataAction: 'SetStatusComplete', label: 'Update Status', position: 30, type: #FOR_ACTION }]
-//@UI.fieldGroup: [{ position: 10, label: 'Procurement List Number', qualifier: 'PList' }]
-    Plist;
-@UI.lineItem: [{ position: 20, label: 'Name' }]
-//@UI.fieldGroup: [{ position: 20, label: 'Name', qualifier: 'PList' }]
-    Name;
-@UI.selectionField: [{ position: 40 }]
-@UI.lineItem: [{ position: 30, label: 'Plate#' }]
-@UI.fieldGroup: [{ position: 30, label: 'Plate#', qualifier: 'Plate' }]
-//                 { position: 10, label: 'Plate#', qualifier: 'GenericUpdate' }]
-    PlateNo;
-@UI.selectionField: [{ position: 50 }]
-@UI.lineItem: [{ position: 40, label: 'Change Request#' }]
-@UI.fieldGroup: [{ position: 30, label: 'Change Request#', qualifier: 'CR' },
-                 { position:20, label: 'Change Request#', qualifier: 'GenericUpdate' }]
-@EndUserText.label: 'CR#'
-    EstChgReq;
-@UI.lineItem: [{ position: 50, label: 'Quantity' }]
-    Qty;
-@UI.lineItem: [{ position: 60, label: 'Unit' }]    
-    Unit;
-@UI.selectionField: [{ position: 60 }]    
-@UI.lineItem: [{ position: 70, label: 'Division' }]    
-@EndUserText.label: 'Division'
-@UI.fieldGroup: [ { position: 50, label: 'Division', qualifier: 'GenericUpdate' }]  
-    Division;
-@UI.selectionField: [{ position: 70 }]    
-@UI.lineItem: [{ position: 80, label: 'Owner' }]   
-@EndUserText.label: 'Owner' 
-    Owner;
-@UI.selectionField: [{ position: 80 }]    
-@UI.lineItem: [{ position: 90, label: 'User' }]
-@EndUserText.label: 'User'    
-@UI.fieldGroup: [ { position: 60, label: 'User', qualifier: 'GenericUpdate' }]   
-    Zzuser;
-@EndUserText.label: 'Year of Manufacturing'  
-@UI.fieldGroup: [ { position: 70, label: 'Year of Manufacturing', qualifier: 'GenericUpdate' }]      
-    YearOfConst;
-@EndUserText.label: 'Expiry Date'    
-@UI.fieldGroup: [ { position: 80, label: 'Expiry Date', qualifier: 'GenericUpdate' }]              
-    ExpDate;
-@EndUserText.label: 'KM Reading'    
-@UI.fieldGroup: [ { position: 90, label: 'KM Reading', qualifier: 'GenericUpdate' }]   
-    KmReading;
-@EndUserText.label: 'Actual Config'    
-@UI.fieldGroup: [ { position: 100, label: 'Actual Config', qualifier: 'GenericUpdate' }]   
-    ActConfig;
-@EndUserText.label: 'Equipment Config Code'    
-@UI.fieldGroup: [ { position: 110, label: 'Equipment Config Codes', qualifier: 'GenericUpdate' }]   
-    EquipConCode;
-@EndUserText.label: 'Allocation Code'    
-    AllocCode;
-@UI.fieldGroup: [{ position: 40, label: 'Equipment Type', qualifier: 'CR' },
-                 { position: 50, label: 'Equipment Type', qualifier: 'EditableUpdate' }]    
-@EndUserText.label: 'Equipment Type'    
-    EquipType;
-@EndUserText.label: 'Description'    
-    Description;
-@UI.lineItem: [{ position: 100, label: 'Diso' }]    
-@UI.fieldGroup: [{ position: 10, label: 'Diso', qualifier: 'AdditionalInfoPlate'}]
-//                 { position: 10, label: 'Diso', qualifier: 'EditableUpdate' }]
-@EndUserText.label: 'Diso'    
-    Diso;
-@UI.lineItem: [{ position: 110, label: 'Diso Options' }]    
-@UI.fieldGroup: [{ position: 20, label: 'Diso Options', qualifier: 'AdditionalInfoPlate' }]
-//                 { position: 20, label: 'Diso Options', qualifier: 'EditableUpdate' }]
-@EndUserText.label: 'Diso Options'
-    DisoOptions;
-@UI.fieldGroup: [{ position: 50, label: 'Log Category', qualifier: 'CR' },
-                 { position: 30, label: 'Log Category', qualifier: 'EditableUpdate' }]    
-@EndUserText.label: 'Log Category'
-    LogCatg;
-@EndUserText.label: 'Comments'
-@UI.fieldGroup: [{ position: 30, label: 'Comments', qualifier: 'AdditionalInfoPlate' }]
-//                 { position: 40, label: 'Comments', qualifier: 'EditableUpdate' }]        
-    Comments;
-@EndUserText.label: 'Reference Number'    
-    RefFile;
-@UI.selectionField: [{ position: 90 }]    
-@UI.lineItem: [{ position: 120, label: 'Status' }]    
-@UI.dataPoint:{ title: 'Status', qualifier: 'Status' }
-@EndUserText.label: 'Status'    
-    Status;
-@UI.lineItem: [{ position: 130, label: 'Approved By' }]    
-    ApprovedBy;
-@EndUserText.label: 'MCE File'
-@UI.fieldGroup: [ { position: 50, label: 'Proc File Num', qualifier: 'EditableUpdate' }]
-    ProcFileNo;
-@EndUserText.label: 'Contract Number'
-@UI.fieldGroup: [ { position: 60, label: 'Contact Number', qualifier: 'EditableUpdate' }]  
-    ContractNo;
-@EndUserText.label: 'Procurement Date'    
-@UI.fieldGroup: [ { position: 70, label: 'Procurement Date', qualifier: 'EditableUpdate' }]   
-    ProcurementDate;
-@EndUserText.label: 'Delivery Date'
-@UI.fieldGroup: [ { position: 80, label: 'Delivery Date', qualifier: 'EditableUpdate' }]
-    DeliveryDate;    
-@UI.selectionField: [{ position: 30 }]
-//@UI.fieldGroup: [{ position: 10, label: 'Created By', qualifier: 'AttachFiles' }]
-@EndUserText.label: 'Created By'
-@UI.fieldGroup: [ { position: 30, label: 'Created By', qualifier: 'GenericUpdate' }]  
-    CreatedBy;
-@UI.selectionField: [{ position: 20 }]
-@EndUserText.label: 'Created On'
-@UI.fieldGroup: [ { position: 40, label: 'Created On', qualifier: 'GenericUpdate' }]   
-@Consumption.filter.selectionType: #INTERVAL
-    CreatedAt;
-@UI.hidden: true
-    ChangedBy;
-@UI.hidden: true
-    ChangedAt;
-//@UI.hidden: true
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem: [{ position: 10, label: 'Procurement List' },
+                 {  importance: #HIGH, dataAction: 'CreateNewLicense', label: 'New From License', position: 10, type: #FOR_ACTION },
+                 {  importance: #HIGH, dataAction: 'CreateNewCR', label: 'New From Change Req#', position: 20, type: #FOR_ACTION },
+                 {  importance: #HIGH, dataAction: 'SetStatusComplete', label: 'Update Status', position: 30, type: #FOR_ACTION }]
+//  @UI.fieldGroup: [{ position: 10, label: 'Procurement List Number', qualifier: 'PList' }]
+  Plist;
+  @UI.lineItem: [{ position: 20, label: 'Name' }]
+  //@UI.fieldGroup: [{ position: 20, label: 'Name', qualifier: 'PList' }]
+  Name;
+  @UI.selectionField: [{ position: 40 }]
+  @UI.lineItem: [{ position: 30, label: 'Plate#' }]
+  @UI.fieldGroup: [{ position: 30, label: 'Plate#', qualifier: 'Plate' },
+                   { position: 10, label: 'Plate#', qualifier: 'GenericUpdate' }]
+  PlateNo;
+  @UI.selectionField: [{ position: 50 }]
+  @UI.lineItem: [{ position: 40, label: 'Change Request#' }]
+  @UI.fieldGroup: [{ position: 30, label: 'Change Request#', qualifier: 'CR' },
+                   { position:20, label: 'Change Request#', qualifier: 'GenericUpdate' }]
+  @EndUserText.label: 'CR#'
+  EstChgReq;
+  @UI.lineItem: [{ position: 50, label: 'Quantity' }]
+  Qty;
+  @UI.lineItem: [{ position: 60, label: 'Unit' }]
+  Unit;
+  @UI.selectionField: [{ position: 60 }]
+  @UI.lineItem: [{ position: 70, label: 'Division' }]
+  @EndUserText.label: 'Division'
+  @UI.fieldGroup: [ { position: 50, label: 'Division', qualifier: 'GenericUpdate' }]
+  Division;
+  @UI.selectionField: [{ position: 70 }]
+  @UI.lineItem: [{ position: 80, label: 'Owner' }]
+  @EndUserText.label: 'Owner'
+  Owner;
+  @UI.selectionField: [{ position: 80 }]
+  @UI.lineItem: [{ position: 90, label: 'User' }]
+  @EndUserText.label: 'User'
+  @UI.fieldGroup: [ { position: 60, label: 'User', qualifier: 'GenericUpdate' }]
+  Zzuser;
+  @EndUserText.label: 'Year of Manufacturing'
+  @UI.fieldGroup: [ { position: 70, label: 'Year of Manufacturing', qualifier: 'GenericUpdate' }]
+  YearOfConst;
+  @EndUserText.label: 'Expiry Date'
+  @UI.fieldGroup: [ { position: 80, label: 'Expiry Date', qualifier: 'GenericUpdate' }]
+  ExpDate;
+  @EndUserText.label: 'KM Reading'
+  @UI.fieldGroup: [ { position: 90, label: 'KM Reading', qualifier: 'GenericUpdate' }]
+  KmReading;
+  @EndUserText.label: 'Actual Config'
+  @UI.fieldGroup: [ { position: 100, label: 'Actual Config', qualifier: 'GenericUpdate' }]
+  ActConfig;
+  @EndUserText.label: 'Equipment Config Code'
+  @UI.fieldGroup: [ { position: 110, label: 'Equipment Config Codes', qualifier: 'GenericUpdate' }]
+  EquipConCode;
+  @EndUserText.label: 'Allocation Code'
+  AllocCode;
+  @UI.fieldGroup: [{ position: 40, label: 'Equipment Type', qualifier: 'CR' },
+                   { position: 50, label: 'Equipment Type', qualifier: 'EditableUpdate' }]
+  @EndUserText.label: 'Equipment Type'
+  EquipType;
+  @EndUserText.label: 'Description'
+  Description;
+  @UI.lineItem: [{ position: 100, label: 'Diso' }]
+  @UI.fieldGroup: [{ position: 10, label: 'Diso', qualifier: 'AdditionalInfoPlate'},
+                   { position: 10, label: 'Diso', qualifier: 'EditableUpdate' }]
+  @EndUserText.label: 'Diso'
+  Diso;
+  @UI.lineItem: [{ position: 110, label: 'Diso Options' }]
+  @UI.fieldGroup: [{ position: 20, label: 'Diso Options', qualifier: 'AdditionalInfoPlate' },
+                   { position: 20, label: 'Diso Options', qualifier: 'EditableUpdate' }]
+  @EndUserText.label: 'Diso Options'
+  DisoOptions;
+  @UI.fieldGroup: [{ position: 50, label: 'Log Category', qualifier: 'CR' },
+                   { position: 30, label: 'Log Category', qualifier: 'EditableUpdate' }]
+  @EndUserText.label: 'Log Category'
+  LogCatg;
+  @EndUserText.label: 'Comments'
+  @UI.fieldGroup: [{ position: 30, label: 'Comments', qualifier: 'AdditionalInfoPlate' },
+                   { position: 40, label: 'Comments', qualifier: 'EditableUpdate' }]
+  Comments;
+  @EndUserText.label: 'Reference Number'
+  RefFile;
+  @UI.selectionField: [{ position: 90 }]
+  @UI.lineItem: [{ position: 120, label: 'Status' }]
+  @UI.dataPoint:{ title: 'Status', qualifier: 'Status' }
+  @EndUserText.label: 'Status'
+  Status;
+  @UI.lineItem: [{ position: 130, label: 'Approved By' }]
+  ApprovedBy;
+  @EndUserText.label: 'MCE File'
+  @UI.fieldGroup: [ { position: 50, label: 'Proc File Num', qualifier: 'EditableUpdate' }]
+  ProcFileNo;
+  @EndUserText.label: 'Contract Number'
+  @UI.fieldGroup: [ { position: 60, label: 'Contact Number', qualifier: 'EditableUpdate' }]
+  ContractNo;
+  @EndUserText.label: 'Procurement Date'
+  @UI.fieldGroup: [ { position: 70, label: 'Procurement Date', qualifier: 'EditableUpdate' }]
+  ProcurementDate;
+  @EndUserText.label: 'Delivery Date'
+  @UI.fieldGroup: [ { position: 80, label: 'Delivery Date', qualifier: 'EditableUpdate' }]
+  DeliveryDate;
+  @UI.selectionField: [{ position: 30 }]
+  //@UI.fieldGroup: [{ position: 10, label: 'Created By', qualifier: 'AttachFiles' }]
+  @EndUserText.label: 'Created By'
+  @UI.fieldGroup: [ { position: 30, label: 'Created By', qualifier: 'GenericUpdate' }]
+  CreatedBy;
+  @UI.selectionField: [{ position: 20 }]
+  @EndUserText.label: 'Created On'
+  @UI.fieldGroup: [ { position: 40, label: 'Created On', qualifier: 'GenericUpdate' }]
+  @Consumption.filter.selectionType: #INTERVAL
+  CreatedAt;
+  @UI.hidden: true
+  ChangedBy;
+  @UI.hidden: true
+  ChangedAt;
+  //@UI.hidden: true
 
-    /* Associations */
-    
+  /* Associations */
+
 }

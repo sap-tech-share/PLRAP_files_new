@@ -20,6 +20,10 @@ association [1] to ZI_STATUS_VH as _StatusText on $projection.Status =_StatusTex
     @Search.fuzzinessThreshold: 0.7
     PlateNo,
     EstChgReq,
+    
+    PlateHidden,
+    CommonHidden,    
+    
     @Semantics.quantity.unitOfMeasure: 'Unit'
     Qty,
     Unit,
