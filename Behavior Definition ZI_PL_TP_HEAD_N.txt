@@ -11,7 +11,7 @@ early numbering
 authorization master ( instance )
 etag master LoclChangedAt
 {
-  field ( features : instance ) PlateNo, EquipType, EstChgReq;
+  field ( features : instance ) PlateNo, EquipType, EstChgReq, RefFile;
   field ( readonly ) Plist, Status, CreatedAt, CreatedBy, ChangedAt, ChangedBy, LoclChangedAt,
                      Division, Zzuser, YearOfConst, ExpDate, KmReading, ActConfig, EquipConCode;
   field ( mandatory ) PlateNo;
@@ -26,7 +26,8 @@ etag master LoclChangedAt
   determination SetCreateStatus on save { create; field PlateNo, EquipType; }
   action ( features : instance ) SetStatusComplete parameter za_status_n result [1] $self;
 
-  static factory action CreateNewLicense [1];
+// 15/09 - Parameter added
+  static factory action CreateNewLicense parameter za_plateno_n [1];
   static factory action CreateNewCR [1];
 
   //      draft action Edit;

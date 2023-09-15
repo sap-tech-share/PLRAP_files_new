@@ -14,8 +14,8 @@ define view entity ZI_PL_HEAD_N as select from zpl_tab_head_n
     plate_no as PlateNo,
     est_chg_req as EstChgReq,
     
-    cast(case when plate_no = '' then '' else 'X' end as abap_boolean preserving type ) as PlateHidden,
-    cast(case when plate_no = '' then 'X' else '' end as abap_boolean preserving type ) as CommonHidden,
+    cast(case when ref_file = '' then '' else 'X' end as abap_boolean preserving type ) as PlateHidden,
+    cast(case when ref_file = '' then 'X' else '' end as abap_boolean preserving type ) as CommonHidden,
     
     @Semantics.quantity.unitOfMeasure: 'Unit'
     qty as Qty,

@@ -150,7 +150,10 @@ annotate entity ZC_PL_HEAD_TP_n with
   @UI.fieldGroup: [{ position: 30, label: 'Comments', qualifier: 'AdditionalInfoPlate' },
                    { position: 40, label: 'Comments', qualifier: 'EditableUpdate' }]
   Comments;
-  @EndUserText.label: 'Reference Number'
+  @UI.lineItem: [{ position: 115, label: 'Reference File' }]
+  @UI.fieldGroup: [{ position: 25, label: 'Reference File', qualifier: 'AdditionalInfoPlate' },
+                   { position: 25, label: 'Reference File', qualifier: 'EditableUpdate' }]
+  @EndUserText.label: 'Reference File'
   RefFile;
   @UI.selectionField: [{ position: 90 }]
   @UI.lineItem: [{ position: 120, label: 'Status' }]

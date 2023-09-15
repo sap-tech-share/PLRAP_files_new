@@ -1,0 +1,15 @@
+@EndUserText.label: 'Abstract Entity for Plate Number'
+define abstract entity ZA_PLATENO_N
+//  with parameters parameter_name : parameter_type
+{
+    @EndUserText.label: 'Plate#'
+    @Consumption.valueHelpDefinition: [ {
+        entity: {
+          name: 'ZI_RESID',
+          element: 'PlateNo'
+        }, useForValidation: true
+      } ]
+    
+    PlateNoAct : char20;
+    
+}

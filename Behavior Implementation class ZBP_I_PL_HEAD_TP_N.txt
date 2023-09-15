@@ -18,15 +18,19 @@ CLASS lhc_plist DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
     METHODS validateplate FOR VALIDATE ON SAVE
       IMPORTING keys FOR plist~validateplate.
+
     METHODS populatevehicledetails FOR DETERMINE ON MODIFY
       IMPORTING keys FOR plist~populatevehicledetails.
+
     METHODS createnewlicense FOR MODIFY
       IMPORTING keys FOR ACTION plist~createnewlicense.
 
     METHODS setcreatestatus FOR DETERMINE ON SAVE
       IMPORTING keys FOR plist~setcreatestatus.
+
     METHODS createnewcr FOR MODIFY
       IMPORTING keys FOR ACTION plist~createnewcr.
+
     METHODS mandatorycheck FOR VALIDATE ON SAVE
       IMPORTING keys FOR plist~mandatorycheck.
 
@@ -48,7 +52,8 @@ CLASS lhc_plist IMPLEMENTATION.
                   %field-PlateNo = COND #( WHEN ( ls_plist_saved-plate_no IS INITIAL )
                                            THEN if_abap_behv=>fc-f-mandatory ELSE if_abap_behv=>fc-f-read_only )
                   %field-EstChgReq = COND #( WHEN ( ls_plist_saved-plate_no IS NOT INITIAL )
-                                           THEN if_abap_behv=>fc-f-read_only ) )
+                                           THEN if_abap_behv=>fc-f-read_only )
+                  %field-RefFile = if_abap_behv=>fc-f-mandatory )
                 ).
   ENDMETHOD.
 
@@ -210,18 +215,64 @@ CLASS lhc_plist IMPLEMENTATION.
 *   This is triggered when clicked on the New From License button
 *   This puts a blank instance with plate indicator to the table which helps the
 *   Fiori Element to identify which field to display for creation
+
+*   Begin of 15/09 - Logic added for plate number validation from the front screen
+    if keys is NOT INITIAL.
+       data(ls_key) = keys[ 1 ].
+    endif.
+    data lv_error TYPE char1.
+    if ls_key-%param-PlateNoAct IS INITIAL.
+*       Updated failed data to framework
+        APPEND VALUE #( %cid = ls_key-%cid ) TO failed-plist.
+*       Update message if the plate number exists
+        APPEND VALUE #( %cid = ls_key-%cid
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = 'No Plate Number Entered') ) TO reported-plist.
+        lv_error = abap_true.
+    else.
+    SELECT SINGLE @abap_true FROM zmg_resid WHERE plate_no = @ls_key-%param-PlateNoAct INTO @DATA(lv_plate_exists).
+        IF lv_plate_exists ne abap_true.
+*       Updated failed data to framework
+        APPEND VALUE #( %cid = ls_key-%cid ) TO failed-plist.
+*       Update message if the plate number exists
+        APPEND VALUE #( %cid = ls_key-%cid
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = 'Invalid Plate Number') ) TO reported-plist.
+        lv_error = abap_true.
+      ENDIF.
+
+      SELECT SINGLE @abap_true FROM zpl_tab_head_n WHERE plate_no = @ls_key-%param-PlateNoAct INTO @DATA(lv_plate_used).
+
+      IF lv_plate_used = abap_true.
+*       Updated failed data to framework
+        APPEND VALUE #( %cid = ls_key-%cid ) TO failed-plist.
+*       Update message if the plate number exists
+        APPEND VALUE #( %cid = ls_key-%cid
+                        %msg = new_message_with_text(
+                        severity = if_abap_behv_message=>severity-error
+                        text = 'Plate Number Exists in Procurement List') ) TO reported-plist.
+        lv_error = abap_true.
+      ENDIF.
+      endif.
+    if lv_error = ''.
+*   End of 15/09 - validation logic
     modify entities of zi_pl_head_tp_n in local mode
         entity Plist
         create from value #( for <instance> in keys
                     ( %cid = <instance>-%cid
+                      PlateNo = ls_key-%param-PlateNoAct
 *                    PlateInd = abap_true
 *                      %is_draft = if_abap_behv=>mk-on
 *                      %control = VALUE #( PlateInd = if_abap_behv=>mk-on )
+                      %control = VALUE #( PlateNo = if_abap_behv=>mk-on )
                       ) )
 
                     mapped mapped
                     failed failed
                     reported reported.
+    endif.
   ENDMETHOD.
 
   METHOD SetCreateStatus.
