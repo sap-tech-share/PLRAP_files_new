@@ -22,6 +22,8 @@ as projection on ZI_PL_HEAD_TP_N
     EstChgReq,
     PlateHidden,
     CommonHidden,    
+    filename,
+    attachmentExists,
     Qty,
     Unit,
     Division,

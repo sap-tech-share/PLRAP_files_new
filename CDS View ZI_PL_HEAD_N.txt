@@ -17,6 +17,14 @@ define view entity ZI_PL_HEAD_N as select from zpl_tab_head_n
     cast(case when ( ref_file = '' and diso = '' and diso_options = '' and comments = '' ) then ' ' else 'X' end as abap_boolean preserving type ) as PlateHidden,
     cast(case when ( ref_file <> '' or diso <> '' or diso_options <> '' or comments <> '' ) then ' ' else 'X' end as abap_boolean preserving type ) as CommonHidden,
     
+    @ObjectModel.virtualElement: true
+    @ObjectModel.virtualElementCalculatedBy: 'ABAP:ZCL_FILE_CHECK'
+    cast( ''  as abap_boolean preserving type )               as attachmentExists,
+    
+    @ObjectModel.virtualElement: true
+    @ObjectModel.virtualElementCalculatedBy: 'ABAP:ZCL_FILE_CHECK'
+    cast( ''  as abap.char(100))               as filename,
+    
     @Semantics.quantity.unitOfMeasure: 'Unit'
     qty as Qty,
     unit as Unit,

@@ -1,0 +1,77 @@
+CLASS zcl_file_check DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+
+    INTERFACES if_sadl_exit .
+    INTERFACES if_sadl_exit_calc_element_read .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_file_check IMPLEMENTATION.
+
+
+  METHOD if_sadl_exit_calc_element_read~calculate.
+    types:
+    BEGIN OF ty_s_attachment_content.
+              INCLUDE TYPE: odata_cv_attach.
+      TYPES  attachment_content TYPE xstring.
+    TYPES  attachment_url     TYPE saeuri.
+    TYPES  attachment_status  TYPE attachmentstatus.
+    TYPES  phio_class         TYPE sdok_class.
+    TYPES  loio_class         TYPE sdok_class.
+    TYPES END OF ty_s_attachment_content .
+  types:
+    ty_t_attachment_content TYPE STANDARD TABLE OF ty_s_attachment_content WITH DEFAULT KEY .
+    DATA:
+      lo_bo           TYPE REF TO cl_odata_cv_gos_bo.
+
+
+    data: lt_data TYPE STANDARD TABLE OF zi_pl_head_n.
+
+    data: et_header TYPE TIHTTPNVP,
+          et_messages TYPE bapiret2_t,
+          et_original_content TYPE TY_T_ATTACHMENT_CONTENT,
+          ms_obj_map TYPE ODATA_CV_OBJ_MAP,
+          lv_obj_key TYPE objky.
+
+    MOVE-CORRESPONDING it_original_data TO lt_data.
+    loop at lt_data ASSIGNING FIELD-SYMBOL(<fs>).
+
+      ms_obj_map-gos_objtype = 'ZOBJTEST2'.
+    CALL METHOD cl_odata_cv_gos_bo=>get_instance
+      EXPORTING
+        is_mapping = ms_obj_map
+      RECEIVING
+        ro_bo      = lo_bo.
+
+    lv_obj_key = |{ <fs>-Plist ALPHA = OUT } |. "<fs>-Plist.
+    CALL METHOD lo_bo->get_attachment_list
+      EXPORTING
+        iv_object_key       = lv_obj_key
+        iv_objecttype_long  = 'ZOBJTEST2'
+        iv_isdraft          = abap_true
+        iv_include_drafts   = abap_true
+      IMPORTING
+        et_original_content = et_original_content
+        et_messages         = et_messages
+        et_header           = et_header.
+    if et_original_content is NOT INITIAL.
+        <fs>-filename = et_original_content[ 1 ]-filename.
+        <fs>-attachmentExists = abap_true.
+    endif.
+    ENDLOOP.
+
+    MOVE-CORRESPONDING lt_data to ct_calculated_data.
+  ENDMETHOD.
+
+
+  METHOD if_sadl_exit_calc_element_read~get_calculation_info.
+
+  ENDMETHOD.
+ENDCLASS.

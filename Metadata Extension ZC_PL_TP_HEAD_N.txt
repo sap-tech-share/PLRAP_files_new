@@ -162,6 +162,10 @@ annotate entity ZC_PL_HEAD_TP_n with
   Status;
   @UI.lineItem: [{ position: 130, label: 'Approved By' }]
   ApprovedBy;
+  @UI.lineItem: [{ position: 140, label: 'Attachment Exists' }]
+  attachmentExists;
+  @UI.lineItem: [{ position: 150, label: 'File Name' }]
+  filename;
   @EndUserText.label: 'MCE File'
   @UI.fieldGroup: [ { position: 50, label: 'Proc File Num', qualifier: 'EditableUpdate' }]
   ProcFileNo;

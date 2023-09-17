@@ -23,6 +23,8 @@ association [1] to ZI_STATUS_VH as _StatusText on $projection.Status =_StatusTex
     
     PlateHidden,
     CommonHidden,    
+    filename,
+    attachmentExists,
     
     @Semantics.quantity.unitOfMeasure: 'Unit'
     Qty,

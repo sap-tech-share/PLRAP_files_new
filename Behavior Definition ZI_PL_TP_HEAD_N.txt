@@ -13,7 +13,8 @@ etag master LoclChangedAt
 {
   field ( features : instance ) PlateNo, EquipType, EstChgReq, RefFile;
   field ( readonly ) Plist, Status, CreatedAt, CreatedBy, ChangedAt, ChangedBy, LoclChangedAt,
-                     Division, Zzuser, YearOfConst, ExpDate, KmReading, ActConfig, EquipConCode;
+                     Division, Zzuser, YearOfConst, ExpDate, KmReading, ActConfig, EquipConCode,
+                     filename, attachmentExists;
   field ( mandatory ) PlateNo;
   create;
   update;
